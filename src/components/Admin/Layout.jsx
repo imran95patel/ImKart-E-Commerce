@@ -15,7 +15,7 @@ const Layout = ({ children }) => {
         className="bg-gray-300 h-screen "
         style={{ marginLeft: size, transition: "0.3s" }}
       >
-        <nav className="bg-white p-6 shadow flex items-center justify-between">
+        <nav className="bg-white p-6 shadow flex items-center justify-between sticky top-0 left-0">
           <div className="flex gap-4 items-center">
             <button
               className="bg-gray-50 hover:bg-indigo-600 hover:text-white w-8 h-8 border"
