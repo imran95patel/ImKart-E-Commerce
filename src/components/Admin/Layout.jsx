@@ -15,6 +15,12 @@ const Layout = ({ children }) => {
       icon: <i className="ri-home-4-line mr-2"></i>,
       link: "/admin/dashboard",
     },
+
+    {
+      lable: "Customers",
+      icon: <i className="ri-user-line mr-2"></i>,
+      link: "/admin/customers",
+    },
     {
       lable: "Products",
       icon: <i className="ri-shopping-cart-fill mr-2"></i>,
@@ -36,11 +42,6 @@ const Layout = ({ children }) => {
       lable: "Settings",
       icon: <i className="ri-settings-3-line mr-2"></i>,
       link: "/admin/settings",
-    },
-    {
-      lable: "Logout",
-      icon: <i className="ri-logout-circle-r-line mr-2"></i>,
-      link: "/admin/logout",
     },
   ];
 
@@ -69,6 +70,9 @@ const Layout = ({ children }) => {
                 {item.lable}
               </Link>
             ))}
+            <button className=" px-4 py-3 text-gray-100 text-left text-[17.5px] hover:bg-green-300 hover:text-red-700 transition:0.3s">
+              <i className="ri-logout-circle-r-line mr-2"></i>Logout
+            </button>
           </div>
         </aside>
         <section
@@ -143,6 +147,9 @@ const Layout = ({ children }) => {
                 {item.lable}
               </Link>
             ))}
+            <button className=" px-4 py-3 text-gray-100 text-left text-[17.5px] hover:bg-green-300 hover:text-red-700 transition:0.3s">
+              <i className="ri-logout-circle-r-line mr-2"></i>Logout
+            </button>
           </div>
         </aside>
         <section className="bg-gray-300 h-screen ">

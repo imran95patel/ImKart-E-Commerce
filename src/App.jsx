@@ -2,8 +2,12 @@ import React from "react";
 import "remixicon/fonts/remixicon.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NotFound from "./components/NotFound";
-import Product from "./components/Admin/Product";
+import Products from "./components/Admin/Products";
 import Orders from "./components/Admin/Orders";
+import Dashboard from "./components/Admin/Dashboard";
+import Customers from "./components/Admin/Customers";
+import Payments from "./components/Admin/Payments";
+import Settings from "./components/Admin/Settings";
 
 const App = () => {
   return (
@@ -11,8 +15,12 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/admin">
-            <Route path="products" element={<Product />} />
+            <Route path="products" element={<Products />} />
             <Route path="orders" element={<Orders />} />
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="customers" element={<Customers />} />
+            <Route path="payments" element={<Payments />} />
+            <Route path="settings" element={<Settings />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
