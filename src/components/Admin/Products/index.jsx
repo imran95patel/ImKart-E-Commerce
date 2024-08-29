@@ -142,13 +142,13 @@ const Products = () => {
       <div>
         <h1 className="text-xl font-semibold mb- ">Products</h1>
 
-        <div className="grid grid-cols-4 gap-8">
+        <div className="grid md:grid-cols-4 gap-8">
           {products.map((item, index) => (
             <div key={index} className="bg-white shadow-lg rounded-md">
               <img
                 src={item.image}
                 alt=""
-                className="rounded-t-md h-[250px] w-full"
+                className="rounded-t-md h-[270px] w-full object-fitt"
               />
               <div className="p-4">
                 <h1 className="text-md capitalize font-semibold">
