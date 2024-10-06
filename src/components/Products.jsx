@@ -6,7 +6,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { useState } from "react";
 
-const Home = () => {
+const Products = () => {
   const [products, setProducts] = useState([
     {
       title: "New Blue Shirts men",
@@ -85,33 +85,8 @@ const Home = () => {
     <>
       <Layout>
         <div>
-          <header>
-            <Swiper
-              className="z-[-1]"
-              slidesPerView={1}
-              navigation={true}
-              pagination={true}
-              modules={[Navigation, Pagination]}
-            >
-              <SwiperSlide>
-                <img src="/Images/slid2.jpg" alt="" />
-              </SwiperSlide>
-              <SwiperSlide>
-                <img src="/Images/slid3.jpg" alt="" />
-              </SwiperSlide>
-              <SwiperSlide>
-                <img src="/Images/slid4.jpg" alt="" />
-              </SwiperSlide>
-              <SwiperSlide>
-                <img src="/Images/slid5.jpg" alt="" />
-              </SwiperSlide>
-              <SwiperSlide>
-                <img src="/Images/slid6.jpg" alt="" />
-              </SwiperSlide>
-            </Swiper>
-          </header>
           <div className="md:p-16 p-8">
-            <h1 className="text-4xl font-bold text-center"> Best Products</h1>
+            <h1 className="text-4xl font-bold text-center"> All Products</h1>
             <p className="text-gray-400 text-center md:w-7/12 mx-auto mt-4 mb-16">
               Lorem ipsum dolor sit amet consectetur adipisicing elit.
               Consequatur, sit facere facilis aliquid, exercitationem nemo nam
@@ -154,4 +129,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Products;
