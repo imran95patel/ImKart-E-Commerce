@@ -17,6 +17,8 @@ import Login from "./components/Login.jsx";
 import Signup from "./components/Signup.jsx";
 import Contact from "./components/Contact.jsx";
 import PreGuard from "./components/Guard/PreGuard.jsx";
+import Cart from "./components/Cart.jsx";
+import Profile from "./components/Profile.jsx";
 
 const App = () => {
   return (
@@ -26,6 +28,9 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<Products />} />
           <Route path="/category" element={<Category />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/profile" element={<Profile />} />
+
           <Route element={<PreGuard />}>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
