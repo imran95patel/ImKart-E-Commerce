@@ -2,7 +2,11 @@ import { useState } from "react";
 import Layout from "../components/Layout";
 import { Link, useNavigate } from "react-router-dom";
 import firebaseAppConfig from "../Util/Firebase_config";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
 
 const auth = getAuth(firebaseAppConfig);
 
@@ -25,9 +29,12 @@ const Signup = () => {
       await createUserWithEmailAndPassword(
         auth,
         fromValue.email,
-        fromValue.password,
-        navigate("/")
+        fromValue.password
       );
+      await updateProfile(auth.currentUser, {
+        displayName: fromValue.fullname,
+      });
+      navigate("/");
       console.log(user);
     } catch (err) {
       setError(err.message);

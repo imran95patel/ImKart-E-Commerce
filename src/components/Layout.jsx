@@ -21,6 +21,8 @@ const Layout = ({ children }) => {
       }
     });
   }, []);
+  console.log(session);
+
   const menus = [
     {
       label: "Home",

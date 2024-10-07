@@ -1,10 +1,81 @@
 import Layout from "./Layout";
+import firebaseAppConfig from "../Util/Firebase_config";
+import { onAuthStateChanged, getAuth, updateProfile } from "firebase/auth";
+
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+const auth = getAuth(firebaseAppConfig);
+const storage = getStorage();
 
 const Profile = () => {
+  const [session, setSession] = useState(null);
+  const [formValue, setFormValue] = useState({
+    fullname: "",
+    email: "",
+    address: "",
+    city: "",
+    state: "",
+    contry: "",
+    pincode: "",
+  });
+  const navigate = useNavigate();
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setSession(user);
+      } else {
+        setSession(false);
+        navigate("/login");
+      }
+    });
+  }, []);
+
+  const handleChange = (e) => {
+    e.preventDefault();
+    const input = e.target;
+    const name = input.name;
+    const value = input.value;
+    setFromValue({
+      ...formValue,
+      [name]: value,
+    });
+    console.log(formValue);
+  };
+  if (session === null)
+    return (
+      <div className="bg-gray-200 fixed top-0 left-0 h-full w-full flex justify-center items-center">
+        <span className="relative flex h-6 w-6 ">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-6 w-6 bg-sky-500"></span>
+        </span>
+      </div>
+    );
+
+  const setProfilePitcher = async (e) => {
+    const input = e.target;
+    const file = input.files[0];
+    const fileNameArray = file.name.split(".");
+    const ext = fileNameArray[fileNameArray.length - 1];
+    const filename = Date.now() + "." + ext;
+    const path = `picthers/${filename}`;
+    const bucket = ref(storage, path);
+    const snapshort = await uploadBytes(bucket, file);
+    const url = await getDownloadURL(snapshort.ref);
+    await updateProfile(auth.currentUser, {
+      photoURL: url,
+    });
+
+    setSession({
+      ...session,
+      photoURL: url,
+    });
+  };
   return (
     <>
       <Layout>
-        <div className="md:my-16 mx-auto shadow-lg rounded-md p-8 md:w-7/12 border">
+        <div className="md:my-16 mx-auto shadow-`https://firebasestorage.googleapis.com/v0/b/mcart-5a93d.appspot.com/o/`lg rounded-md p-8 md:w-7/12 border">
           <div className="flex gap-3">
             <i className="ri-user-line text-3xl font-semibold "></i>
             <h1 className="text-3xl font-semibold ">Profile</h1>
@@ -12,7 +83,7 @@ const Profile = () => {
           <hr className="my-3" />
           <div className=" w-24 h-24 mx-auto relative mb-6">
             <img
-              src="Images/Designer.png"
+              src={session.photoURL ? session.photoURL : "Images/Designer.png"}
               alt=""
               className="rounded-full h-24 w-24 "
             />
@@ -20,6 +91,7 @@ const Profile = () => {
               type="file"
               accept="image/*"
               className="absolute top-0 left-0  w-full h-full opacity-0"
+              onChange={setProfilePitcher}
             />
           </div>
           <form className="grid md:grid-cols-2 md:gap-3">
@@ -27,31 +99,34 @@ const Profile = () => {
               <label className="text-lg font-semibold "> Full name</label>
               <input
                 required
+                onChange={handleChange}
                 type="text "
                 name="fullname"
                 className="p-2 border-gray-300 border rounded"
-                value="Imran patel"
+                value={session.displayName}
               />
             </div>
             <div className=" flex flex-col gap-2">
               <label className="text-lg font-semibold "> Email</label>
               <input
+                onChange={handleChange}
                 required
                 type="email "
                 name="email"
                 className="p-2 border-gray-300 border rounded"
-                value="example@gmail.com"
+                value={session.email}
               />
             </div>
 
             <div className=" flex flex-col gap-2">
               <label className="text-lg font-semibold ">Mobile </label>
               <input
+                onChange={handleChange}
                 required
                 type="number "
                 name="mobile"
                 className="p-2 border-gray-300 border rounded"
-                value="456789123"
+                value={formValue.mobile}
               />
             </div>
             <div />
@@ -60,51 +135,56 @@ const Profile = () => {
                 Area/Street/vilage{" "}
               </label>
               <input
+                onChange={handleChange}
                 required
                 type="text "
                 name="address"
                 className="p-2 border-gray-300 border rounded"
-                value="Pune Maharashtra"
+                value={formValue.address}
               />
             </div>
             <div className=" flex flex-col gap-2">
               <label className="text-lg font-semibold ">City </label>
               <input
+                onChange={handleChange}
                 required
                 type="text "
                 name="city"
                 className="p-2 border-gray-300 border rounded"
-                value="Solapur"
+                value={formValue.city}
               />
             </div>
             <div className=" flex flex-col gap-2">
               <label className="text-lg font-semibold ">State </label>
               <input
+                onChange={handleChange}
                 required
                 type="text "
                 name="state"
                 className="p-2 border-gray-300 border rounded"
-                value="Maharashtra"
+                value={formValue.state}
               />
             </div>
             <div className=" flex flex-col gap-2">
               <label className="text-lg font-semibold ">Contry </label>
               <input
+                onChange={handleChange}
                 required
                 type="text "
                 name="contry"
                 className="p-2 border-gray-300 border rounded"
-                value="India"
+                value={formValue.contry}
               />
             </div>
             <div className=" flex flex-col gap-2">
               <label className="text-lg font-semibold ">Pincode </label>
               <input
+                onChange={handleChange}
                 required
                 type="tenumberxt "
                 name="pincode"
                 className="p-2 border-gray-300 border rounded"
-                value="411048"
+                value={formValue.pincode}
               />
             </div>
             <button className="px-12 py-2 bg-rose-500 text-white rounded w-fit hover:bg-green-600">
