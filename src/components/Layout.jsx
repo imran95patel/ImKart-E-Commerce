@@ -21,7 +21,7 @@ const Layout = ({ children }) => {
       }
     });
   }, []);
-  console.log(session);
+  // console.log(session);
 
   const menus = [
     {
@@ -100,7 +100,11 @@ const Layout = ({ children }) => {
                   onClick={() => setAccountMenu(!accountMenu)}
                 >
                   <img
-                    src="/Images/Designer.png"
+                    src={
+                      session.photoURL
+                        ? session.photoURL
+                        : "/Images/Designer.png"
+                    }
                     className=" w-10 h-10  rounded-full"
                     alt=""
                   />
@@ -233,6 +237,57 @@ const Layout = ({ children }) => {
           style={{ width: open ? 250 : 0, transition: "0.3s" }}
         >
           <div className="md:hidden flex flex-col p-8 gap-6">
+            {session && (
+              <button
+                className="relative"
+                onClick={() => setAccountMenu(!accountMenu)}
+              >
+                <div className="flex items-center gap-4">
+                  <img
+                    src={
+                      session.photoURL
+                        ? session.photoURL
+                        : "/Images/Designer.png"
+                    }
+                    className=" w-10 h-10  rounded-full"
+                    alt=""
+                  />
+                  <div className="flex flex-col">
+                    <p className="text-white capitalize text-left">
+                      {session.displayName}
+                    </p>
+                    <p className="text-white text-left ">{session.email}</p>
+                  </div>
+                </div>
+
+                {accountMenu && (
+                  <div className="w-[150px] py-3 bg-white absolute top-12 right-0 shadow-lg shadow-green-400 animate__animated animate__fadeIn flex flex-col items-start ">
+                    <Link
+                      to="/profile"
+                      className="hover:bg-gray-100 w-full text-left py-2 px-3 rounded"
+                    >
+                      <i className="ri-user-line mr-2"></i>
+                      My Profile
+                    </Link>
+                    <Link
+                      to="/cart"
+                      className="hover:bg-gray-100 w-full text-left py-2 px-3 rounded"
+                    >
+                      <i className="ri-shopping-cart-line mr-2"></i>
+                      Cart
+                    </Link>
+
+                    <button
+                      className="hover:bg-gray-100 w-full text-left py-2 px-3 rounded"
+                      onClick={() => signOut(auth)}
+                    >
+                      <i className="ri-logout-circle-r-line mr-2"></i>
+                      LogOut
+                    </button>
+                  </div>
+                )}
+              </button>
+            )}
             {menus.map((item, index) => (
               <button
                 onClick={() => mobileLink(item.path)}
