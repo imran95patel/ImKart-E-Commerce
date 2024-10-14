@@ -4,10 +4,11 @@ import { onAuthStateChanged, getAuth, updateProfile } from "firebase/auth";
 
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { json, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-
+import { getFirestore, collection, addDoc } from "firebase/firestore";
 const auth = getAuth(firebaseAppConfig);
+const db = getFirestore(firebaseAppConfig);
 const storage = getStorage();
 
 const Profile = () => {
@@ -18,6 +19,16 @@ const Profile = () => {
     email: "",
     mobile: "",
   });
+
+  const [addressValue, setAddressValue] = useState({
+    address: "",
+    city: "",
+    state: "",
+    country: "",
+    pincode: "",
+    userId: "  ",
+  });
+
   const navigate = useNavigate();
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -36,6 +47,10 @@ const Profile = () => {
         ...formValue,
         fullname: session.displayName,
         mobile: session.phoneNumber ? session.phoneNumber : "",
+      });
+      setAddressValue({
+        ...addressValue,
+        userId: session.uid,
       });
     }
   }, [session]);
@@ -67,9 +82,32 @@ const Profile = () => {
       title: "Profile Saved !",
     });
   };
-  const setAddress = (e) => {
+
+  const handleAddrssValue = (e) => {
+    const input = e.target;
+    const name = input.name;
+    const value = input.value;
+
+    setAddressValue({
+      ...addressValue,
+      [name]: value,
+    });
+  };
+  const saveAddress = async (e) => {
     e.preventDefault();
-    alert("");
+    try {
+      await addDoc(collection(db, "addresses"), { address: addressValue });
+      new Swal({
+        icon: "success",
+        title: "Address Saved !",
+      });
+    } catch (err) {
+      new Swal({
+        icon: "error",
+        title: "Failed ",
+        text: err.message,
+      });
+    }
   };
 
   if (session === null)
@@ -188,62 +226,57 @@ const Profile = () => {
           </div>
           <hr className="my-3" />
 
-          <form className="grid md:grid-cols-2 md:gap-3" onSubmit={setAddress}>
+          <form className="grid md:grid-cols-2 md:gap-3" onSubmit={saveAddress}>
             <div className=" flex flex-col gap-2  col-span-full">
               <label className="text-lg font-semibold ">
                 Area/Street/vilage{" "}
               </label>
               <input
-                onChange={handleChange}
+                onChange={handleAddrssValue}
                 required
                 type="text "
                 name="address"
                 className="p-2 border-gray-300 border rounded"
-                value={formValue.address}
               />
             </div>
             <div className=" flex flex-col gap-2">
               <label className="text-lg font-semibold ">City </label>
               <input
-                onChange={handleChange}
+                onChange={handleAddrssValue}
                 required
                 type="text "
                 name="city"
                 className="p-2 border-gray-300 border rounded"
-                value={formValue.city}
               />
             </div>
             <div className=" flex flex-col gap-2">
               <label className="text-lg font-semibold ">State </label>
               <input
-                onChange={handleChange}
+                onChange={handleAddrssValue}
                 required
                 type="text "
                 name="state"
                 className="p-2 border-gray-300 border rounded"
-                value={formValue.state}
               />
             </div>
             <div className=" flex flex-col gap-2">
-              <label className="text-lg font-semibold ">Contry </label>
+              <label className="text-lg font-semibold ">country </label>
               <input
-                onChange={handleChange}
+                onChange={handleAddrssValue}
                 required
                 type="text "
-                name="contry"
+                name="country"
                 className="p-2 border-gray-300 border rounded"
-                value={formValue.contry}
               />
             </div>
             <div className=" flex flex-col gap-2">
               <label className="text-lg font-semibold ">Pincode </label>
               <input
-                onChange={handleChange}
+                onChange={handleAddrssValue}
                 required
                 type="tenumberxt "
                 name="pincode"
                 className="p-2 border-gray-300 border rounded"
-                value={formValue.pincode}
               />
             </div>
 
