@@ -6,7 +6,14 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { useEffect, useState } from "react";
 import { json, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 const auth = getAuth(firebaseAppConfig);
 const db = getFirestore(firebaseAppConfig);
 const storage = getStorage();
@@ -42,17 +49,29 @@ const Profile = () => {
   }, []);
 
   useEffect(() => {
-    if (session) {
-      setFormValue({
-        ...formValue,
-        fullname: session.displayName,
-        mobile: session.phoneNumber ? session.phoneNumber : "",
-      });
-      setAddressValue({
-        ...addressValue,
-        userId: session.uid,
-      });
-    }
+    const req = async () => {
+      if (session) {
+        setFormValue({
+          ...formValue,
+          fullname: session.displayName,
+          mobile: session.phoneNumber ? session.phoneNumber : "",
+        });
+        setAddressValue({
+          ...addressValue,
+          userId: session.uid,
+        });
+
+        //fetching address
+
+        const col = collection(db, "addresses");
+        const q = query(col, where("userId", "==", session.uid));
+        const snapshort = await getDocs(q);
+        snapshort.forEach((doc) => {
+          console.log(doc.data());
+        });
+      }
+    };
+    req();
   }, [session]);
 
   // console.log(session);
