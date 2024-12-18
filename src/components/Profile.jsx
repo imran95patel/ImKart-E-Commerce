@@ -65,8 +65,10 @@ const Profile = () => {
 
         const col = collection(db, "addresses");
         const q = query(col, where("userId", "==", session.uid));
-        const snapshort = await getDocs(q);
-        snapshort.forEach((doc) => {
+        const snapshot = await getDocs(q);
+        console.log(snapshot);
+
+        snapshot.forEach((doc) => {
           console.log(doc.data());
         });
       }
