@@ -225,7 +225,7 @@ const Layout = ({ children }) => {
                 ></textarea>
 
                 <button className="bg-black text-white py-3 px-6 rounded">
-                  s Submit
+                  Submit
                 </button>
               </form>
             </div>
